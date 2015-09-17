@@ -28,8 +28,14 @@ trait DataRequestHydrator
     protected function setDataPagSeguro($data)
     {
         $this->extractSenderName($data->data)->extractSenderCPF($data->data)
-        ->extractSenderEmail($data->data)->extractSenderAreaCode($data->data)
-        ->extractSenderPhone($data->data, $data->sender);
+        ->extractSenderEmail($data->data);
+
+        if(isset($data['sender']['phone']) && !empty($data['sender']['phone']))
+        {
+            $this->extractSenderAreaCode($data->data)
+                ->extractSenderPhone($data->data, $data->sender);
+        }
+
         $this->clearArrObjectRequest($data->data, ['sender', 'address']);
         return array_filter($data->data);
     }
@@ -41,7 +47,7 @@ trait DataRequestHydrator
         $data['senderName'] = (array_key_exists('senderName', $keySender) ? $keySender['senderName'] : null);
         return $this;
     }
-    
+
     private function extractSenderCPF(&$data)
     {
         $keys = array_fill_keys(['senderCPF'], null);
@@ -49,7 +55,7 @@ trait DataRequestHydrator
         $data['senderCPF'] = (array_key_exists('senderCPF', $keySender) ? $keySender['senderCPF'] : null);
         return $this;
     }
-    
+
     private function extractSenderEmail(&$data)
     {
         $keys = array_fill_keys(['senderEmail'], null);
@@ -57,17 +63,19 @@ trait DataRequestHydrator
         $data['senderEmail'] = (array_key_exists('senderEmail', $keySender) ? $keySender['senderEmail'] : null);
         return $this;
     }
-    
+
     private function extractSenderAreaCode(&$data)
     {
+
         $keys = array_fill_keys(['senderAreaCode'], null);
         $keySender = array_intersect_key($data['sender']['phone'], $keys);
         $data['senderAreaCode'] = (array_key_exists('senderAreaCode', $keySender) ? $keySender['senderAreaCode'] : null);
         return $this;
     }
-    
+
     private function extractSenderPhone(&$data, $sender)
     {
+
         $keys = array_fill_keys(['senderPhone'], null);
         $keySender = array_intersect_key($data['sender']['phone'], $keys);
         $data['senderPhone'] = (array_key_exists('senderPhone', $keySender) ? $sender->getPhone()->getSenderPhone() : null);
