@@ -30,7 +30,7 @@ trait DataRequestHydrator
         $this->extractSenderName($data->data)->extractSenderCPF($data->data)
         ->extractSenderEmail($data->data);
 
-        if(isset($data['sender']['phone']) && !empty($data['sender']['phone']))
+        if(isset($data->data['sender']['phone']) && !empty($data->data['sender']['phone']))
         {
             $this->extractSenderAreaCode($data->data)
                 ->extractSenderPhone($data->data, $data->sender);
