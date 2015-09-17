@@ -19,6 +19,8 @@ use laravel\pagseguro\Validators\ValidatorsRequest as Validators,
     laravel\pagseguro\Complements\DataHydratorTrait,
     laravel\pagseguro\Complements\DataRequestHydrator;
 
+use Exception;
+
 class Request implements RequestInterface
 {
 
@@ -39,7 +41,7 @@ class Request implements RequestInterface
     protected $_objectRequest;
 
     const ARGSEPARATOR = '&';
-    
+
     public function getValidationRules(){}
 
     /**
@@ -53,7 +55,7 @@ class Request implements RequestInterface
     }
 
     /**
-     * Método responsável por verificar se o Curl esta ativo para utilização da 
+     * Método responsável por verificar se o Curl esta ativo para utilização da
      * biblioteca
      * @copyright (c) 2014, Michael Araujo
      * @access private
@@ -69,7 +71,7 @@ class Request implements RequestInterface
 
         $this->setObjectCURL();
     }
-    
+
     /**
      * Método responsável por iniciar o curl para a requisição
      * @copyright (c) 2015, Michael Araujo
@@ -98,7 +100,7 @@ class Request implements RequestInterface
                 ->_setContentLength()
                 ->_setMethodOptions()
                 ->_setOptions();
-        
+
         return $this->_request();
     }
 
@@ -120,7 +122,7 @@ class Request implements RequestInterface
 
         return false;
     }
-    
+
     /**
      * Método responsável por obter os dados de envio para no objeto httpPostField
      * @copyright (c) 2015, Michael Araujo
@@ -132,9 +134,9 @@ class Request implements RequestInterface
     {
         return $this->httpPostField;
     }
-    
+
     /**
-     * Método responsável por setar o tamnho da string de envio contida no 
+     * Método responsável por setar o tamnho da string de envio contida no
      * objeto httpPostField
      * @copyright (c) 2015, Michael Araujo
      * @access private
@@ -146,9 +148,9 @@ class Request implements RequestInterface
         $this->_defineSizeFiel = strlen($this->httpPostField);
         return $this;
     }
-    
+
     /**
-     * Método responsável por obter o tamnho da string de envio contida no 
+     * Método responsável por obter o tamnho da string de envio contida no
      * objeto httpPostField
      * @copyright (c) 2015, Michael Araujo
      * @access public
@@ -159,9 +161,9 @@ class Request implements RequestInterface
     {
         return $this->_defineSizeFiel;
     }
-    
+
     /**
-     * Método responsável por setar a string com o tamnho contido no 
+     * Método responsável por setar a string com o tamnho contido no
      * objeto httpPostField
      * @copyright (c) 2015, Michael Araujo
      * @access private
@@ -173,9 +175,9 @@ class Request implements RequestInterface
         $this->_contentLength = "Content-length: " . $this->getSizeBuildQuery();
         return $this;
     }
-    
+
     /**
-     * Método responsável por obter a string com o tamnho contido no 
+     * Método responsável por obter a string com o tamnho contido no
      * objeto httpPostField
      * @copyright (c) 2015, Michael Araujo
      * @access public
@@ -186,9 +188,9 @@ class Request implements RequestInterface
     {
         return $this->_contentLength;
     }
-    
+
     /**
-     * Método responsável por separar os argumentos contendo o TimeOut e o 
+     * Método responsável por separar os argumentos contendo o TimeOut e o
      * Charset de cabeçalho de envio
      * @copyright (c) 2015, Michael Araujo
      * @access private
@@ -203,9 +205,9 @@ class Request implements RequestInterface
         }
         return $this;
     }
-      
+
     /**
-     * Método responsável por verificar os argumentos e separar TimeOut e 
+     * Método responsável por verificar os argumentos e separar TimeOut e
      * Charset
      * @copyright (c) 2015, Michael Araujo
      * @access protected
@@ -217,7 +219,7 @@ class Request implements RequestInterface
         $this->_hydrate($this->_arguments, '_set');
         return $this;
     }
-    
+
     /**
      * Método responsável por setar o timeout de requisição
      * @copyright (c) 2015, Michael Araujo
@@ -233,7 +235,7 @@ class Request implements RequestInterface
         $this->_timeout = $timeOut;
         return $this;
     }
-    
+
     /**
      * Método responsável por obter o timeout de requisição
      * @copyright (c) 2015, Michael Araujo
@@ -245,7 +247,7 @@ class Request implements RequestInterface
     {
         return $this->_timeout;
     }
-    
+
     /**
      * Método responsável por setar o charset de requisição
      * @copyright (c) 2015, Michael Araujo
@@ -261,7 +263,7 @@ class Request implements RequestInterface
         $this->_charset = $charset;
         return $this;
     }
-    
+
     /**
      * Método responsável por obter o charset de requisição
      * @copyright (c) 2015, Michael Araujo
@@ -273,7 +275,7 @@ class Request implements RequestInterface
     {
         return $this->_charset;
     }
-    
+
     /**
      * Método responsável por obter a string charset para a requisição
      * @copyright (c) 2015, Michael Araujo
@@ -286,7 +288,7 @@ class Request implements RequestInterface
     {
         return "Content-Type: application/x-www-form-urlencoded; charset={$this->_charset}";
     }
-    
+
     /**
      * Método responsável por setar a URL de requisição
      * @copyright (c) 2015, Michael Araujo
@@ -302,7 +304,7 @@ class Request implements RequestInterface
         $this->_url = $url;
         return $this;
     }
-    
+
     /**
      * Método responsável por obter a URL de requisição
      * @copyright (c) 2015, Michael Araujo
@@ -329,10 +331,10 @@ class Request implements RequestInterface
             CURLOPT_POST       => true,
             CURLOPT_POSTFIELDS => $this->httpPostField,
         ];
-        
+
         return $this;
     }
-    
+
     /**
      * Método responsável por obter o options de requisição
      * @copyright (c) 2015, Michael Araujo
@@ -344,7 +346,7 @@ class Request implements RequestInterface
     {
         return $this->_optionsMethod;
     }
-    
+
     /**
      * Método responsável por setar os dados de opção de para o envio da
      * requisição.
@@ -367,12 +369,12 @@ class Request implements RequestInterface
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_CONNECTTIMEOUT => $this->_timeout
         ];
-        
+
         $this->_setRequest();
     }
-    
+
     /**
-     * Método responsável por unir os obtetos de options e optionsMethod para 
+     * Método responsável por unir os obtetos de options e optionsMethod para
      * requisição.
      * @copyright (c) 2015, Michael Araujo
      * @access protected
@@ -382,10 +384,10 @@ class Request implements RequestInterface
     protected function _setRequest()
     {
         $this->_objectRequest = array_replace($this->_options, $this->_optionsMethod);
-        
+
         return $this;
     }
-    
+
     /**
      * Método responsável por retornar as opções setadas para a requisição.
      * @copyright (c) 2015, Michael Araujo
@@ -397,7 +399,7 @@ class Request implements RequestInterface
     {
         return $this->_options;
     }
-    
+
     /**
      * Método responsável por retornar a requisição que sera feita ao PagSeguro
      * @copyright (c) 2015, Michael Araujo
@@ -414,32 +416,39 @@ class Request implements RequestInterface
      * @todo Concluir as chamadas e verificações de erro
      */
     protected function _request()
-    {   
+    {
         curl_setopt_array($this->curl, $this->_objectRequest);
+
         $result = curl_exec($this->curl);
-        
-        $xml = simplexml_load_string($result);
-        
+        $info  = curl_getinfo($this->curl);
         $error = curl_errno($this->curl);
-        
-        if($error){
+
+        if($error || $info['http_code'] !== 200){
+
             $errorMessage = curl_error($this->curl);
-            throw new Exception("Erro: $errorMessage");
+
+            if(empty($errorMessage)) $errorMessage = $result;
+
+            throw new Exception(
+                sprintf('Erro %d: %s', $info['http_code'], $errorMessage)
+            );
         }
-        
+
+        $xml = simplexml_load_string($result);
+
         curl_close($this->curl);
-        
-        $this->setCode($xml->code);
+
+        $this->setCode( (string) $xml->code);
     }
-    
+
     private function setCode( $code )
     {
         $this->code = $code;
     }
-    
+
     public function getCode()
     {
         return $this->code;
     }
-    
+
 }
