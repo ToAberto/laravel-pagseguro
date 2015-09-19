@@ -33,7 +33,7 @@ class Request implements RequestInterface
     private   $_contentLength;
     private   $_arguments;
     private   $_timeout = 0;
-    private   $_charset = 'ISO-8859-1';
+    private   $_charset = 'UTF-8';
     private   $_url = 'https://ws.pagseguro.uol.com.br/v2/checkout';
     protected $curl;
     protected $_optionsMethod;
